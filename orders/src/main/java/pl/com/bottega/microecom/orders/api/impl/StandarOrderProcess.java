@@ -15,17 +15,16 @@ public class StandarOrderProcess implements OrderProcess {
 
     private OrderRepository orderRepository;
     private CatalogFacade catalogFacade;
-    private EventPublisher eventPublisher;
 
-    public StandarOrderProcess(OrderRepository orderRepository, CatalogFacade catalogFacade, EventPublisher eventPublisher) {
+    public StandarOrderProcess(OrderRepository orderRepository, CatalogFacade catalogFacade) {
         this.orderRepository = orderRepository;
         this.catalogFacade = catalogFacade;
-        this.eventPublisher = eventPublisher;
     }
 
     @Override
     public Long create(Long userId) {
-        Order order = new Order(userId, eventPublisher);
+        // TODO Zadanie 4, nowy Order rowniez powinien dostawac eventPublishera
+        Order order = new Order(userId, null);
         orderRepository.save(order);
         return order.getId();
     }
