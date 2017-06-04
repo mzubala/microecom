@@ -21,7 +21,7 @@ public class ApiAuthFilter extends GenericFilterBean {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        // TODO Zadanie 2
+        // TODO Zadanie 1
     }
 
 }
