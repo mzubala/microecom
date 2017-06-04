@@ -9,22 +9,16 @@ import pl.com.bottega.microecom.commons.model.events.EventPublisherAware;
 
 import javax.persistence.PostLoad;
 
-public class JpaInjectingListener implements ApplicationContextAware {
+public class JpaInjectingListener {
+
+    // TODO Zadanie 4 wstrzyknij do encji podsystem zdarzeń EventPublisher o ile
+    // encja implementuje EventPublisherAware
 
     private static ApplicationContext ctx;
 
     @PostLoad
     public void injectServices(BaseEntity aggregateRoot) {
-        if (aggregateRoot instanceof EventPublisherAware)
-            ((EventPublisherAware) aggregateRoot).setEventPublisher(eventPublisher());
+
     }
 
-    private EventPublisher eventPublisher() {
-        return ctx.getBean(EventPublisher.class);
-    }
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        ctx = applicationContext;
-    }
 }
