@@ -14,13 +14,12 @@ import javax.validation.Valid;
 @RequestMapping("/products")
 public class ProductController {
 
+    // TODO Zadanie 5 wyslij message jms gdy produkt ulega zmianie
+
     private ProductRepository repository;
 
-    private JmsTemplate jmsTemplate;
-
-    public ProductController(ProductRepository repository, JmsTemplate jmsTemplate) {
+    public ProductController(ProductRepository repository) {
         this.repository = repository;
-        this.jmsTemplate = jmsTemplate;
     }
 
     @PostMapping
@@ -37,12 +36,8 @@ public class ProductController {
         Product product = repository.findOne(id);
         product.setPrice(req.getPrice().toMoney());
         product.setName(req.getName());
-        publishProductChange(id);
     }
 
-    private void publishProductChange(@PathVariable Long id) {
-        jmsTemplate.convertAndSend("product-updated", id);
-    }
 
     @GetMapping("/{id}")
     public ModelMap get(@PathVariable Long id) {
