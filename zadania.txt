@@ -1,0 +1,69 @@
+Zadanie 0. (Aplikacja szkoleniowa)
+
+Pobierz aplikację z http://github.com/mzubala/microecom i zaimportuj do InteliJ.
+Uruchom serwer bazy danych.
+Uruchom serwer ActiveMQ.
+Uruchom poszczególne mikroserwisy.
+
+Zadanie 1. (Spring Security)
+
+Dane są 2 mikro serwisy - user i catalog.
+
+Odpowiedzialność serwisu user:
+	- przechowywanie danych użytkowników i rejestracja
+	- generowanie tokenów autentykacyjncyh
+	- zarządzanie rolami użytkowników
+
+Odpowiedzialność serwisu catalog:
+	- przechowywanie danych produktów (crud)
+
+Zaimplementuj następujące wymagania używając Spring Security:
+	1. Każdy może się zarejestrować w serwisie user
+	2. Każdy może się zalogować w serwisie user - otrzymuje wówczas token potwierdzający autentykację
+	3. Tylko ADMIN może zmieniać role użytkowników w serwisie user
+	5. Każdy może pobierać dane dowolnego produktu z katalogu
+	6. Tylko MANAGER może twożyć i edytować produkty
+
+Zadanie 2. (Spring Security)
+
+Dodaj fukcjonalność hashowania haseł w bazie danych serwisu user.
+
+Zadanie 3. (Spring Security)
+
+Dodaj funcjonalność zabezpieczenia wywołań API pomiędzy serwisami. Każdy serwis ma swój klucz API i drugi serwis musi go znać, żeby wywołać dowolną metodę API. Tylko niektóre metody API mogą być w ten sposób wywoływane - dodaj specialną rolę o nazwie API_CALLER.
+
+Zadanie 4. (Event Driven, pluginy)
+
+	1. W bibliotece commons zaimplementuj interfejs EventPublisher w klasie SpringEventPublisher.
+	2. W bibliotec commons zaiplementuj hibernetowego listenera, który będzie wstrzykiwał do encji (obiektów niezarządzanych 		przez springa) podsystem zdarzeń tj. EventPublishera.
+	2. W orders zadeklaruj komponent SpringEventPublisher i JpaInjectingListener.
+	3. Dodaj listenery zdarzeń OrderPlacedEvent i ProductAddedEvent które wywołają odpowiednie metody BIFacade.
+	4. W.w. listenery mają być aktywne tylo wtedy gdy parametr konfiguracyjny microecom.bi.active ma wartość true.
+
+Zadanie 5. (JMS)
+	1. W serwisie catalog gdy cena lub nazwa produktu ulegną zmianie opublikuj zdarzenie przez JMS.
+	2. W serwisie order odbierz zdarzenie i zaktualizuj nazwy i ceny produktów we wszystkich zamówieniach w statusie NEW.
+	3. Operacja updejtu cen powinna się odbywać w tranzakcji. Sprawdź co się stanie gdy wyrzucisz wyjątek:
+		- w transakcji bazodanowej
+		- poza transakcją db (w transakcji jms)
+	4. Dodaj do aplikacji bibliotekę spring-boot-starter-jta-bitronix i sprawdź jak to zmieni w.w. scenariusze wyrzucania 		wyjątków.
+
+
+Zadanie 6. (Async)
+
+Zaprojektuj i zaimplementuj funkcjonalność generowania raportów CSV zamówień złożonych danego dnia. Generowanie raportu powinno odbywać się na rządanie klienta, ale nie powinno blokować serwera, ponieważ może trwać długo. Raporty za dany dzień powinny generować się tylko raz. Ponowne rządanie o raport za dany dzień powinno zwracać raport zapisany w db.
+
+Zadanie 7. (Spring Data)
+
+Stwórz w bibliotece common interfejs repozytorium BaseRepository<T extends BaseAggregateRoot, ID> z defaultowymi metodami:
+
+T get(ID id) - zwraca obiekt o zdanym id lub wyrzuca wyjatek EntityNotFoundException
+
+Optional<T> getOptionally(ID id) - zwraca pustego optionala lub optionala ze znalezionym obiektem
+
+Obie metody nie powinny zwracać obiektów które zostały usunięte metodą soft delete.
+
+Zadanie 8. (Transakcje, JMS)
+
+Pewne produkty są mocno pożądane (np. ze względu na wyprzedaż) i aplikacja musi jednocześnie obsłużyć żądanie zakupu tych produktów przez wielu różnych klientów. Zasoby w magazynie są ograniczone i firma chce uniknąć sytuacji, w której klient kupi produkt i nie będzie można zrealizować zamówienia z powodu braku towaru. Zaprojektuj rozwiązanie, które zapobiega nadsprzedaży produktów. Gdy wszystkie dostępne produkty danego typu zostaną sprzedane, aplikacja powinna odmawiać dalszej sprzedaży. Zwróć
+uwagę, że taki problem występuje stosunkowo rzadko, więc rozwiązanie nie powinno mieć znacząco negatywnego wpływu na wydajność obsługi żądań, których ten problem nie dotyczy.
