@@ -27,7 +27,6 @@
         <module>commons</module>
         <module>user</module>
         <module>user-client</module>
-        <module>user-client</module>
         <module>catalog-client</module>
     </modules>
 
