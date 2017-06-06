@@ -1,6 +1,8 @@
 package pl.com.bottega.microecom.orders.ui;
 
+import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
+import pl.com.bottega.microecom.catalogclient.ProductInfo;
 import pl.com.bottega.microecom.orders.api.ProductChangeHandler;
 
 @Component
@@ -12,6 +14,9 @@ public class CatalogListener {
         this.productChangeHandler = productChangeHandler;
     }
 
-    // TODO Zadanie 5 odbierz komunikat jms o zmianie produktu i użyj productChangeHandler
+    @JmsListener(destination = "product-updated")
+    public void productUpdated(Long productId) {
+        productChangeHandler.updateOrders(productId);
+    }
 
 }
