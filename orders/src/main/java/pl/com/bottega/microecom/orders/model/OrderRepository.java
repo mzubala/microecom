@@ -3,17 +3,11 @@ package pl.com.bottega.microecom.orders.model;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import pl.com.bottega.microecom.commons.model.BaseRepository;
 
 import java.time.LocalDate;
 
-public interface OrderRepository extends CrudRepository<Order, Long> {
-    default Order get(Long orderId) {
-        Order o = findOne(orderId);
-        if (o == null)
-            throw new OrderNotFoundExcetption();
-        else
-            return o;
-    }
+public interface OrderRepository extends BaseRepository<Order, Long> {
 
     @Query("SELECT o.id FROM Order o JOIN o.orderItems i " +
             "WHERE i.product.productId = :productId " +
