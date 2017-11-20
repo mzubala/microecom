@@ -1,6 +1,5 @@
 package pl.com.bottega.microecom.orders.infrastructure;
 
-import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFactoryConfigurer;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
@@ -11,9 +10,6 @@ import org.springframework.jms.config.JmsListenerContainerFactory;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
-import org.springframework.scheduling.annotation.AsyncConfigurer;
-import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.client.RestTemplate;
 import pl.com.bottega.microecom.catalogclient.CatalogClient;
 import pl.com.bottega.microecom.commons.infrastructure.JpaInjectingListener;
@@ -21,12 +17,10 @@ import pl.com.bottega.microecom.commons.infrastructure.SpringEventPublisher;
 import pl.com.bottega.microecom.commons.model.events.EventPublisher;
 
 import javax.jms.ConnectionFactory;
-import java.util.concurrent.Executor;
 
 @Configuration
 @EnableJms
-@EnableAsync
-public class SpringConfig implements AsyncConfigurer {
+public class SpringConfig {
 
     @Bean
     public CatalogClient catalogClient(RestTemplate restTemplate) {
@@ -64,21 +58,6 @@ public class SpringConfig implements AsyncConfigurer {
         converter.setTargetType(MessageType.TEXT);
         converter.setTypeIdPropertyName("_type");
         return converter;
-    }
-
-    public Executor getAsyncExecutor() {
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(2);
-        executor.setMaxPoolSize(2);
-        executor.setQueueCapacity(500);
-        executor.setThreadNamePrefix("Microecom-Orders-Async-Executor");
-        executor.initialize();
-        return executor;
-    }
-
-    @Override
-    public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
-        return null;
     }
 
 }

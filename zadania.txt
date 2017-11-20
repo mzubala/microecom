@@ -74,10 +74,7 @@ Zadanie 7. (JMS)
 
 Zadanie 8. (Async)
 
-Zaprojektuj i zaimplementuj funkcjonalność generowania raportów CSV zamówień złożonych danego dnia.
-Generowanie raportu powinno odbywać się na rządanie klienta, ale nie powinno blokować serwera,
-ponieważ może trwać długo. Raporty za dany dzień powinny generować się tylko raz.
-Ponowne rządanie o raport za dany dzień powinno zwracać raport zapisany w db.
+Zaprojektuj i zaimplementuj funkcjonalność generowania raportów CSV zamówień złożonych danego dnia. Generowanie raportu powinno odbywać się na rządanie klienta, ale nie powinno blokować serwera, ponieważ może trwać długo. Raporty za dany dzień powinny generować się tylko raz. Ponowne rządanie o raport za dany dzień powinno zwracać raport zapisany w db.
 
 Zadanie 9. (Spring Data)
 
