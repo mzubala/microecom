@@ -25,7 +25,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 addFilterBefore(apiAuthFilter(), UsernamePasswordAuthenticationFilter.class).
                 authorizeRequests().
                     antMatchers("/users/**/roles").hasRole("ADMIN").
-                    antMatchers("/users/authentications", "/users/registrations").permitAll().
                 and().authorizeRequests().
                     antMatchers("/users", "/users/**").authenticated()
         ;

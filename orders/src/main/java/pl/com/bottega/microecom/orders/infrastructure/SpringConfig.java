@@ -32,15 +32,7 @@ public class SpringConfig {
         return new RestTemplate();
     }
 
-    @Bean
-    public EventPublisher eventPublisher(ApplicationEventPublisher pub) {
-        return new SpringEventPublisher(pub);
-    }
-
-    @Bean
-    public JpaInjectingListener jpaInjectingListener() {
-        return new JpaInjectingListener();
-    }
+    // TODO Zadanie 4 - zadeklaruj JpaInjectingListener i EventPublisher
 
     @Bean
     public JmsListenerContainerFactory<?> myFactory(ConnectionFactory connectionFactory,
