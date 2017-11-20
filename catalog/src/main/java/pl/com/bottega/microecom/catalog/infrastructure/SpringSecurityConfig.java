@@ -11,7 +11,6 @@ import pl.com.bottega.microecom.userclient.UserClient;
 import javax.servlet.Filter;
 
 @Configuration
-@EnableGlobalMethodSecurity(securedEnabled = true)
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -19,16 +18,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.
-                csrf().disable().
-                addFilterBefore(apiAuthFilter(), UsernamePasswordAuthenticationFilter.class).
-                authorizeRequests().
-                    antMatchers("/products", "POST").hasRole("ADMIN").
-                    anyRequest().permitAll();
-    }
-
-    private Filter apiAuthFilter() {
-        return new ApiAuthFilter(userClient);
+        //TODO Zadanie 1
     }
 
 }

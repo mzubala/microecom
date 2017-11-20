@@ -20,18 +20,13 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.
-                csrf().disable().
-                addFilterBefore(apiAuthFilter(), UsernamePasswordAuthenticationFilter.class).
+        http.csrf().disable().
+                addFilterBefore(new ApiAuthFilter(authenticationRepository), UsernamePasswordAuthenticationFilter.class).
                 authorizeRequests().
-                    antMatchers("/users/**/roles").hasRole("ADMIN").
-                and().authorizeRequests().
-                    antMatchers("/users", "/users/**").authenticated()
-        ;
+                    antMatchers("/registrations", "/authentications").permitAll().
+                    antMatchers("/users/**", "PUT").hasRole("ADMIN").
+                anyRequest().authenticated();
     }
 
-    private Filter apiAuthFilter() {
-        return new ApiAuthFilter(authenticationRepository);
-    }
 
 }
