@@ -5,9 +5,32 @@ Uruchom serwer bazy danych.
 Uruchom serwer ActiveMQ.
 Uruchom poszczególne mikroserwisy.
 
-Zadanie 1. (Spring Security)
+Zadanie 1. (REST)
 
-Dane są 2 mikro serwisy - user i catalog.
+Zaprojektuj API RESTowe dla systemu obiegu dokumentów.
+Zwróć uwagę na dobór:
+    - nazw endpointów
+    - metod rządań HTTP (safe, indempotent)
+    - paramterów wejściowych
+    - parametrów wyjściowych
+API powinno umożliwiać:
+    - tworzenie/edycję dokumentów
+    - weryfikacje dokumentów
+    - publikacje dokumentów
+    - archiwizacje dokumentów
+    - potwierdzenie przeczytania dokumentu
+    - pobranie dokumentu
+    - wyszukiwanie dokumentów
+
+Zadanie 2. (AOP)
+
+Napisz aspekt wykrywający podwyższoną liczbę zapytań w ramach Use Caseu.
+Do sprawdzenia ilości zapytań użyj Hibernateowgo API statystyk.
+Aspekt powinien zalogować warning jeśli ilość zapytań przekroczy 30.
+
+Zadanie 3. (Spring Security)
+
+Dane są 4. mikro serwisy - user i catalog.
 
 Odpowiedzialność serwisu user:
 	- przechowywanie danych użytkowników i rejestracja
@@ -24,15 +47,15 @@ Zaimplementuj następujące wymagania używając Spring Security:
 	5. Każdy może pobierać dane dowolnego produktu z katalogu
 	6. Tylko MANAGER może twożyć i edytować produkty
 
-Zadanie 2. (Spring Security)
+Zadanie 5. (Spring Security)
 
 Dodaj fukcjonalność hashowania haseł w bazie danych serwisu user.
 
-Zadanie 3. (Spring Security)
+Zadanie 6. (Spring Security)
 
 Dodaj funcjonalność zabezpieczenia wywołań API pomiędzy serwisami. Każdy serwis ma swój klucz API i drugi serwis musi go znać, żeby wywołać dowolną metodę API. Tylko niektóre metody API mogą być w ten sposób wywoływane - dodaj specialną rolę o nazwie API_CALLER.
 
-Zadanie 4. (Event Driven, pluginy)
+Zadanie 7. (Event Driven, pluginy)
 
 	1. W bibliotece commons zaimplementuj interfejs EventPublisher w klasie SpringEventPublisher.
 	2. W bibliotec commons zaiplementuj hibernetowego listenera, który będzie wstrzykiwał do encji (obiektów niezarządzanych 		przez springa) podsystem zdarzeń tj. EventPublishera.
@@ -40,7 +63,7 @@ Zadanie 4. (Event Driven, pluginy)
 	3. Dodaj listenery zdarzeń OrderPlacedEvent i ProductAddedEvent które wywołają odpowiednie metody BIFacade.
 	4. W.w. listenery mają być aktywne tylo wtedy gdy parametr konfiguracyjny microecom.bi.active ma wartość true.
 
-Zadanie 5. (JMS)
+Zadanie 8. (JMS)
 	1. W serwisie catalog gdy cena lub nazwa produktu ulegną zmianie opublikuj zdarzenie przez JMS.
 	2. W serwisie order odbierz zdarzenie i zaktualizuj nazwy i ceny produktów we wszystkich zamówieniach w statusie NEW.
 	3. Operacja updejtu cen powinna się odbywać w tranzakcji. Sprawdź co się stanie gdy wyrzucisz wyjątek:
@@ -49,14 +72,14 @@ Zadanie 5. (JMS)
 	4. Dodaj do aplikacji bibliotekę spring-boot-starter-jta-bitronix i sprawdź jak to zmieni w.w. scenariusze wyrzucania 		wyjątków.
 
 
-Zadanie 6. (Async)
+Zadanie 9. (Async)
 
 Zaprojektuj i zaimplementuj funkcjonalność generowania raportów CSV zamówień złożonych danego dnia.
 Generowanie raportu powinno odbywać się na rządanie klienta, ale nie powinno blokować serwera,
 ponieważ może trwać długo. Raporty za dany dzień powinny generować się tylko raz.
 Ponowne rządanie o raport za dany dzień powinno zwracać raport zapisany w db.
 
-Zadanie 7. (Spring Data)
+Zadanie 10. (Spring Data)
 
 Stwórz w bibliotece common interfejs repozytorium BaseRepository<T extends BaseAggregateRoot, ID> z defaultowymi metodami:
 
@@ -66,7 +89,12 @@ Optional<T> getOptionally(ID id) - zwraca pustego optionala lub optionala ze zna
 
 Obie metody nie powinny zwracać obiektów które zostały usunięte metodą soft delete.
 
-Zadanie 8. (Transakcje, JMS)
+Zadanie 11. (Transakcje, JMS)
 
-Pewne produkty są mocno pożądane (np. ze względu na wyprzedaż) i aplikacja musi jednocześnie obsłużyć żądanie zakupu tych produktów przez wielu różnych klientów. Zasoby w magazynie są ograniczone i firma chce uniknąć sytuacji, w której klient kupi produkt i nie będzie można zrealizować zamówienia z powodu braku towaru. Zaprojektuj rozwiązanie, które zapobiega nadsprzedaży produktów. Gdy wszystkie dostępne produkty danego typu zostaną sprzedane, aplikacja powinna odmawiać dalszej sprzedaży. Zwróć
-uwagę, że taki problem występuje stosunkowo rzadko, więc rozwiązanie nie powinno mieć znacząco negatywnego wpływu na wydajność obsługi żądań, których ten problem nie dotyczy.
+Pewne produkty są mocno pożądane (np. ze względu na wyprzedaż)
+i aplikacja musi jednocześnie obsłużyć żądanie zakupu tych produktów przez wielu różnych klientów.
+Zasoby w magazynie są ograniczone i firma chce uniknąć sytuacji, w której klient kupi produkt i nie będzie można zrealizować zamówienia z powodu braku towaru.
+Zaprojektuj rozwiązanie, które zapobiega nadsprzedaży produktów.
+Gdy wszystkie dostępne produkty danego typu zostaną sprzedane, aplikacja powinna odmawiać dalszej sprzedaży.
+Zwróć uwagę, że taki problem występuje stosunkowo rzadko, więc rozwiązanie nie powinno mieć znacząco negatywnego wpływu
+ na wydajność obsługi żądań, których ten problem nie dotyczy.
