@@ -29,7 +29,32 @@ public class ApiAuthFilter extends GenericFilterBean {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        // TODO Zadanie 1
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        HttpServletResponse response = (HttpServletResponse) servletResponse;
+        String token = request.getHeader(REQUEST_TOKEN_HEADER);
+        if (token != null) {
+            UserInfo user = null;
+            try {
+                user = userClient.getUser(token);
+            }
+            catch(Exception ex) {
+                unsuccessfulAuthentication(request, response, new AuthenticationServiceException("failed to authenticate within user service", ex));
+                return;
+            }
+            if (user == null) {
+                unsuccessfulAuthentication(request, response, new BadCredentialsException("invalid auth token"));
+            } else {
+                SecurityContextHolder.getContext().setAuthentication(new UserInfoAuthentication(user));
+                filterChain.doFilter(servletRequest, servletResponse);
+            }
+        } else
+            filterChain.doFilter(servletRequest, servletResponse);
+
+    }
+
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+        SecurityContextHolder.clearContext();
+        response.sendError(401);
     }
 
 }
