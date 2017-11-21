@@ -2,6 +2,7 @@ package pl.com.bottega.microecom.user.controllers.authentication;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,13 +24,16 @@ public class AuthenticationController {
     private AuthenticationRepository authenticationRepository;
 
     @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
     private UserRepository userRepository;
 
     @PostMapping
     @Transactional
     public AuthenticationResponse create(@RequestBody AuthenticationRequest request) {
-        User user = userRepository.findByLoginAndPassword(request.getLogin(), request.getPassword());
-        if (user != null) {
+        User user = userRepository.findByLogin(request.getLogin());
+        if (user != null && passwordEncoder.matches(request.getPassword(), user.password())) {
             Authentication auth = user.createAuthentication();
             return AuthenticationResponse.success(auth.getToken());
         } else

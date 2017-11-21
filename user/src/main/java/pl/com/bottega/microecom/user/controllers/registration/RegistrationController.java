@@ -1,6 +1,7 @@
 package pl.com.bottega.microecom.user.controllers.registration;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,12 +20,16 @@ public class RegistrationController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @PostMapping
     @Transactional
     public void createAccount(@Valid @RequestBody CreateAccountRequest request) {
         if (userRepository.findByLogin(request.getLogin()) != null)
             throw new LoginOccupiedException();
-        User user = new User(request.getLogin(), request.getPassword());
+        String hashedPassword = passwordEncoder.encode(request.getPassword());
+        User user = new User(request.getLogin(), hashedPassword);
         user.addRole(Role.CUSTOMER);
         userRepository.save(user);
     }

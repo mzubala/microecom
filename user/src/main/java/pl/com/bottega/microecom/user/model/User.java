@@ -50,4 +50,8 @@ public class User extends BaseAggregateRoot {
         this.roles.clear();
         this.roles.addAll(roles);
     }
+
+    public String password() {
+        return password;
+    }
 }
