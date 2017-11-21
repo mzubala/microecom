@@ -1,0 +1,72 @@
+GET /documents?title=xxx&content=xxxx
+{
+    "documents": [
+        {
+            "id": 15,
+            "title": "xxxx"
+            "_links": {
+                "details": {
+                    "href": "/documents/15"
+                },
+                "publish": {
+                    "href": "/"
+                }
+            }
+        },
+        {
+
+        },
+        {
+
+        }
+    ]
+    "pagination": {
+        "page": 4,
+        "pageSize": 20,
+        "count": 1000,
+        "pagesCount": 50
+    }
+}
+
+GET /documents/{id}
+{
+    "id": "",
+    "title": "",
+    "_links": {
+
+    }
+}
+
+POST /documents
+{
+    "title": "",
+    "content": ""
+}
+
+{
+    "id": 55
+    "_links": {
+
+    }
+}
+
+PUT /documents/{id}
+{
+    "title": "",
+    "content": ""
+}
+
+PUT /documents/{id}/verification
+PUT /documents/{id}/publication
+{
+    "employeeIds": [],
+    "departmentIds": []
+}
+
+PUT /documents/{id}/confirmation
+
+PUT /documents/{id}/confirmation/{employeeId}
+PUT /documents/{id}/confirmation-for
+{
+    "employeeId": 333
+}
