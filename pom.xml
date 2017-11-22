@@ -28,6 +28,7 @@
         <module>user</module>
         <module>user-client</module>
         <module>catalog-client</module>
+        <module>docflow</module>
     </modules>
 
     <dependencies>

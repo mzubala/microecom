@@ -53,7 +53,9 @@ Dodaj fukcjonalność hashowania haseł w bazie danych serwisu user.
 
 Zadanie 5. (Spring Security)
 
-Dodaj funcjonalność zabezpieczenia wywołań API pomiędzy serwisami. Każdy serwis ma swój klucz API i drugi serwis musi go znać, żeby wywołać dowolną metodę API. Tylko niektóre metody API mogą być w ten sposób wywoływane - dodaj specialną rolę o nazwie API_CALLER.
+Dodaj funcjonalność zabezpieczenia wywołań API pomiędzy serwisami.
+Każdy serwis ma swój klucz API i drugi serwis musi go znać, żeby wywołać dowolną metodę API.
+Tylko niektóre metody API mogą być w ten sposób wywoływane - dodaj specialną rolę o nazwie API_CALLER.
 
 Zadanie 6. (Event Driven, pluginy)
 
@@ -74,17 +76,17 @@ Zadanie 7. (JMS)
 
 Zadanie 8. (Async)
 
-Zaprojektuj i zaimplementuj funkcjonalność generowania raportów CSV zamówień złożonych danego dnia. Generowanie raportu powinno odbywać się na rządanie klienta, ale nie powinno blokować serwera, ponieważ może trwać długo. Raporty za dany dzień powinny generować się tylko raz. Ponowne rządanie o raport za dany dzień powinno zwracać raport zapisany w db.
+Zaprojektuj i zaimplementuj funkcjonalność generowania raportów CSV zamówień złożonych danego dnia.
+Generowanie raportu powinno odbywać się na rządanie klienta, ale nie powinno blokować serwera, ponieważ może trwać długo.
+Raporty za dany dzień powinny generować się tylko raz.
+Ponowne rządanie o raport za dany dzień powinno zwracać raport zapisany w db.
 
 Zadanie 9. (Spring Data)
 
-Stwórz w bibliotece common interfejs repozytorium BaseRepository<T extends BaseAggregateRoot, ID> z defaultowymi metodami:
-
-T get(ID id) - zwraca obiekt o zdanym id lub wyrzuca wyjatek EntityNotFoundException
-
-Optional<T> getOptionally(ID id) - zwraca pustego optionala lub optionala ze znalezionym obiektem
-
-Obie metody nie powinny zwracać obiektów które zostały usunięte metodą soft delete.
+Zaimplementuj endpoint wyszukujący produkty po nazwie i po przedziale
+cenowym. Wszystkie parametry wyszukiwania są opcionalne. Wyniki wyszukiwania
+powinny być stronnicowane.
+Napisz testy akceptacyjne do serwisu realizującego wyszukiwanie.
 
 Zadanie 10. (Transakcje, JMS)
 

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.com.bottega.microecom.catalog.model.Product;
 import pl.com.bottega.microecom.catalog.repositories.ProductRepository;
 import pl.com.bottega.microecom.commons.api.MoneyDto;
+import pl.com.bottega.microecom.commons.model.events.ProductChangedEvent;
 
 import javax.validation.Valid;
 
@@ -17,9 +18,11 @@ public class ProductController {
     // TODO Zadanie 5 wyslij message jms gdy produkt ulega zmianie
 
     private ProductRepository repository;
+    private JmsTemplate jmsTemplate;
 
-    public ProductController(ProductRepository repository) {
+    public ProductController(ProductRepository repository, JmsTemplate jmsTemplate) {
         this.repository = repository;
+        this.jmsTemplate = jmsTemplate;
     }
 
     @PostMapping
@@ -36,6 +39,8 @@ public class ProductController {
         Product product = repository.findOne(id);
         product.setPrice(req.getPrice().toMoney());
         product.setName(req.getName());
+        ProductChangedEvent event = new ProductChangedEvent(id, "elo elo");
+        jmsTemplate.convertAndSend("product-changed", event);
     }
 
 

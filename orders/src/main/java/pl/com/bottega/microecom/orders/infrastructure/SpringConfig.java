@@ -1,5 +1,7 @@
 package pl.com.bottega.microecom.orders.infrastructure;
 
+import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFactoryConfigurer;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
@@ -10,17 +12,21 @@ import org.springframework.jms.config.JmsListenerContainerFactory;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
+import org.springframework.scheduling.annotation.AsyncConfigurerSupport;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.client.RestTemplate;
 import pl.com.bottega.microecom.catalogclient.CatalogClient;
 import pl.com.bottega.microecom.commons.infrastructure.JpaInjectingListener;
 import pl.com.bottega.microecom.commons.infrastructure.SpringEventPublisher;
-import pl.com.bottega.microecom.commons.model.events.EventPublisher;
 
 import javax.jms.ConnectionFactory;
+import java.util.concurrent.Executor;
 
 @Configuration
 @EnableJms
-public class SpringConfig {
+@EnableAsync
+public class SpringConfig extends AsyncConfigurerSupport {
 
     @Bean
     public CatalogClient catalogClient(RestTemplate restTemplate) {
@@ -33,6 +39,15 @@ public class SpringConfig {
     }
 
     // TODO Zadanie 4 - zadeklaruj JpaInjectingListener i EventPublisher
+    @Bean
+    public SpringEventPublisher springEventPublisher(ApplicationEventPublisher publisher) {
+        return new SpringEventPublisher(publisher);
+    }
+
+    @Bean
+    public JpaInjectingListener jpaInjectingListener(AutowireCapableBeanFactory f) {
+        return new JpaInjectingListener(f);
+    }
 
     @Bean
     public JmsListenerContainerFactory<?> myFactory(ConnectionFactory connectionFactory,
@@ -50,6 +65,16 @@ public class SpringConfig {
         converter.setTargetType(MessageType.TEXT);
         converter.setTypeIdPropertyName("_type");
         return converter;
+    }
+
+    public Executor getAsyncExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(2);
+        executor.setMaxPoolSize(2);
+        executor.setQueueCapacity(500);
+        executor.setThreadNamePrefix("Microecom-Orders-Async-Executor");
+        executor.initialize();
+        return executor;
     }
 
 }

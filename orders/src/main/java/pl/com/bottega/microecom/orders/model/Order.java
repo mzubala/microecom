@@ -1,5 +1,6 @@
 package pl.com.bottega.microecom.orders.model;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import pl.com.bottega.microecom.commons.model.BaseAggregateRoot;
 import pl.com.bottega.microecom.commons.model.Money;
 import pl.com.bottega.microecom.commons.model.events.EventPublisher;
@@ -20,6 +21,7 @@ import static com.google.common.base.Preconditions.checkState;
 public class Order extends BaseAggregateRoot implements EventPublisherAware {
 
     @Transient
+    @Autowired
     private EventPublisher eventPublisher;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)

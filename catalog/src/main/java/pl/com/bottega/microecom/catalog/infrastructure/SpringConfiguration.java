@@ -1,5 +1,6 @@
 package pl.com.bottega.microecom.catalog.infrastructure;
 
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFactoryConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +11,7 @@ import org.springframework.jms.support.converter.MappingJackson2MessageConverter
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
 import org.springframework.web.client.RestTemplate;
+import pl.com.bottega.microecom.commons.infrastructure.JpaInjectingListener;
 import pl.com.bottega.microecom.userclient.UserClient;
 
 import javax.jms.ConnectionFactory;
@@ -44,5 +46,10 @@ public class SpringConfiguration {
         converter.setTargetType(MessageType.TEXT);
         converter.setTypeIdPropertyName("_type");
         return converter;
+    }
+
+    @Bean
+    public JpaInjectingListener jpaInjectingListener(AutowireCapableBeanFactory f) {
+        return new JpaInjectingListener(f);
     }
 }
