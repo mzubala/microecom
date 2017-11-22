@@ -20,6 +20,15 @@ public class Product extends BaseAggregateRoot {
     @NotNull
     private Money price;
 
+    public Product(String name, Money price) {
+        this.name = name;
+        this.price = price;
+    }
+
+    public Product() {
+
+    }
+
     public String getName() {
         return name;
     }
@@ -35,4 +44,6 @@ public class Product extends BaseAggregateRoot {
     public void setPrice(Money price) {
         this.price = price;
     }
+
+
 }

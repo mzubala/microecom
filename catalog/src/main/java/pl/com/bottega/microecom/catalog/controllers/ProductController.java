@@ -1,5 +1,6 @@
 package pl.com.bottega.microecom.catalog.controllers;
 
+import org.springframework.data.domain.Page;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
@@ -19,10 +20,12 @@ public class ProductController {
 
     private ProductRepository repository;
     private JmsTemplate jmsTemplate;
+    private ProductsFinder productsFinder;
 
-    public ProductController(ProductRepository repository, JmsTemplate jmsTemplate) {
+    public ProductController(ProductRepository repository, JmsTemplate jmsTemplate, ProductsFinder productsFinder) {
         this.repository = repository;
         this.jmsTemplate = jmsTemplate;
+        this.productsFinder = productsFinder;
     }
 
     @PostMapping
@@ -53,5 +56,11 @@ public class ProductController {
         model.addAttribute("id", id);
         return model;
     }
+
+    @GetMapping
+    public Page<Product> search(ProductSearchCriteria productSearchCriteria) {
+        return productsFinder.search(productSearchCriteria);
+    }
+
 
 }
